@@ -49,6 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 ### External Libraries
 #### Twitter4J
 Copyright (C) 2007 Yusuke Yamamoto
+
 Copyright (C) 2011 Twitter, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you
