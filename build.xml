@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="IrcBot" default="compile" basedir=".">
+
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="lib" location="lib"/>
+  <property name="dist" location="dist"/>
+
+  <path id="library.classpath">
+    <fileset dir="${lib}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="src" destdir="build" encoding="UTF-8" includeAntRuntime="no" source="1.6">
+      <classpath>
+	<path refid="library.classpath"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="resource" depends="init">
+    <copy todir="${build}">
+      <fileset dir="${src}">
+	<exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="jar" depends="compile,resource">
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${dist}/${ant.project.name}-${DSTAMP}-SNAPSHOT.jar" basedir="${build}">
+      <manifest>
+	<attribute name="Built-By" value="${user.name}"/>
+	<attribute name="Main-Class" value="info.xopowo.ircbot.Main"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+  <target name="check-syntax" depends="init"
+	  description="For Emacs Flymake sytax checking.">
+    <dirname property="flymake.tmpdir" file="${CHK_SOURCES}"/>
+    <echo message="${flymake.tmpdir}"/>
+    <javac srcdir="${flymake.tmpdir}"
+	   destdir="${build}"
+           includeAntRuntime="no"
+           includeJavaRuntime="no"
+           debug="true"
+           fork="yes"
+           encoding="UTF-8">
+      <classpath>
+        <path refid="library.classpath"/>
+      </classpath>
+    </javac>
+  </target>
+</project>
