@@ -1,11 +1,14 @@
+Tweet2IrcBot
+============
+
 How to run
-==========
+----------
 
     $ ant jar
     $ sh runbot.sh
 
 Configuration
-=============
+-------------
 Configuration file is below:
 
     bot.server = localhost
@@ -25,8 +28,9 @@ To apply configuration file, use -c command line option.
     $ sh runbot.sh -c config.properties
 
 Licence
-=======
+-------
 Tweet2IrcBot - An IRC bot that send to IRC channel from user/user-list tweets. 
+
 Copyright (C) 2012 Jun SAITO
 
 This program is free software; you can redistribute it and/or modify
