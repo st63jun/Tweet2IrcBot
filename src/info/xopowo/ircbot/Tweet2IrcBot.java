@@ -37,10 +37,8 @@ public class Tweet2IrcBot extends PircBot implements IStatusListener {
 
         for (Status status : list) {
             String message = new StringBuilder()
-		.append(Colors.BOLD)
 		.append(status.getUser().getScreenName())
 		.append(" : ")
-		.append(Colors.NORMAL)
 		.append(status.getText().replace('\n', ' '))
 		.toString();
             System.err.println(status.getCreatedAt() + " | " + message);
@@ -60,6 +58,7 @@ public class Tweet2IrcBot extends PircBot implements IStatusListener {
 		.append(reader.readLine())
 		.append(TwitterUtils.rateLimitToString(e.getRateLimitStatus()))
 		.toString();
+	    reader.close();
         } catch (IOException e1) {}
         System.err.println(message);
         for (String ch : getChannels()) {
