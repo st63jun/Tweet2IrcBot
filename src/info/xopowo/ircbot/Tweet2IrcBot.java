@@ -11,6 +11,7 @@ import twitter4j.RateLimitStatus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -20,6 +21,7 @@ import static info.xopowo.ircbot.TwitterUtils.sleep;
 public class Tweet2IrcBot extends PircBot implements IStatusListener {
 
     public static final long IRC_POST_INTERVAL = 3000;
+    public static final int API_LIMIT_WARN_THRESHOLD = 45;
 
     public Tweet2IrcBot(String nick) {
         setName(nick);
@@ -28,11 +30,20 @@ public class Tweet2IrcBot extends PircBot implements IStatusListener {
     @Override
     public void onReceiveStatuses(ResponseList<Status> list) {
         Collections.reverse(list);
-	String limitInfo = TwitterUtils.rateLimitToString(list.getRateLimitStatus());
-	System.err.println(limitInfo);
-	for (String ch : getChannels()) {
-	    sendMessage(ch, limitInfo);
-	    sleep(IRC_POST_INTERVAL);
+	RateLimitStatus limit = list.getRateLimitStatus();
+	if (limit.getRemainingHits() < API_LIMIT_WARN_THRESHOLD) {
+	    String message = new StringBuilder()
+		.append("WARN: API limit is ")
+		.append(limit.getRemainingHits())
+		.append(" remains. Reset time is ")
+		.append(DateFormat.getTimeInstance(DateFormat.SHORT).format(limit.getResetTime()))
+		.append(" .")
+		.toString();
+	    System.err.println(message);
+	    for (String ch : getChannels()) {
+		sendMessage(ch, message);
+		sleep(IRC_POST_INTERVAL);
+	    }
 	}
 
         for (Status status : list) {
@@ -62,7 +73,7 @@ public class Tweet2IrcBot extends PircBot implements IStatusListener {
         } catch (IOException e1) {}
         System.err.println(message);
         for (String ch : getChannels()) {
-            sendMessage(ch, message);
+            sendMessage(ch, "API error.");
 	    sleep(IRC_POST_INTERVAL);
         }
     }
