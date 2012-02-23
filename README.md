@@ -29,7 +29,7 @@ To apply configuration file, use -c command line option.
 
 Licence
 -------
-Tweet2IrcBot - An IRC bot that send tweets to IRC channel from user/user-list. 
+Tweet2IrcBot - A tiny bot that send tweets to IRC channel from twitter user/user-list.
 
 Copyright (C) 2012 Jun SAITO
 
