@@ -67,7 +67,6 @@ public class Tweet2IrcBot extends PircBot implements IStatusListener {
         try {
             message = new StringBuilder()
 		.append(reader.readLine())
-		.append(TwitterUtils.rateLimitToString(e.getRateLimitStatus()))
 		.toString();
 	    reader.close();
         } catch (IOException e1) {}
